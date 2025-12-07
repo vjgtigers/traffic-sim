@@ -1,0 +1,11 @@
+<configuration>
+  <input>
+    <net-file value=".//sumoFiles//map.net.xml"/>
+    <route-files value=".//sumoFiles//map.rou.xml"/>
+  </input>
+  <time>
+    <begin value="0"/>
+    <end value="6000"/>
+    <step-length value="0.1"/>
+  </time>
+</configuration>
