@@ -1,7 +1,9 @@
 run sumo from the command line with: sumo-gui -c map.sumocfg --remote-port 13333 --start
 this is using sumo 1.25.0
 
-then run the pythonConnect.py file
+then run the closeReroute.py/rerouteImmediately.py file
+(the first one will only reroute when close to the blockage, the second one will reroute the moment the vehicle spawns in)
+
 
 the simulation will not start until it connects
 
@@ -13,7 +15,7 @@ then go back to the python script command line and hit enter and the simulation 
 this simulation simulates cars only turning around once they get close to the crash
 depending on how much time i have to work on this, i might have the cars slow down around the area too to make the impact more noticable 
 
-i dont have the cars rerouting from a farther distance yet 
+i dont have the cars rerouting from a farther distance yet -- now have one working, its the rerouteImmediately.py file
 
 the two other "simulations" would just be running the map.sumocfg, without connecting to the python file, just remove the --remote-port 13333
 this would simulate the general enviroment without any accidents/road closures
