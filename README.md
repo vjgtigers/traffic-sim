@@ -65,8 +65,22 @@ Two scenarios are defined:
     - You may also simulate the road closure in SUMO by manually closing the roads and continueing w/o any rerouting script. This would simulate no intelligence.
 
 
-# Data Collection
+# Data Visualization
 
+SUMO provides many tool for this in the source code. If you installed SUMO the tradition way or compiled from source they will be packaged with it.
+If not, clone the SUMO github to access the scripts:
+
+```console
+git clone git@github.com:eclipse-sumo/sumo.git
+cd sumo
+export SUMO_HOME=$(pwd)
+```
+
+### Heatmap of road utilization
+
+```console
+$ sumo/tools/visualization/plot_net_speeds.py -c data/edges.xml -n sumoFiles/map.net.xml 
+```
 
 
 

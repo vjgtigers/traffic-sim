@@ -1,5 +1,6 @@
 import os,sys, time, traceback, traci, random, argparse
 from watchers import EdgeEntryWatcher
+from utility import get_unique_filename
 
 rerouteTimes = {}
 def addToRerouteQueue(simStep, vehs):
@@ -33,27 +34,6 @@ def disallowEdges(conn):
         conn.edge.setMaxSpeed(i,1)
     print("crash simulated")
 
-def share_knowledge():
-    traci.start([os.environ["SUMO_BIN"],
-                 "-c", "/home/andrew/Documents/School/FA25/CS4420/traffic-sim/map.sumocfg",
-                 "--start",
-                 "--edgedata-output","data/edges.xml"])
-    print("Connected to SUMO")
-
-    closedEdges = ["-301325216#1", "301327121#12", "19317061#16", "19318601#13", "19317061#17"]
-    edgeWatchers = [EdgeEntryWatcher(edge, seed_from_simulation=True) for edge in closedEdges]
-
-    traci.simulationStep()
-    disallowEdges(traci)
-    x = input("Waiting for user, press enter to continue...")
-    step = 1
-    while step < 6000:
-        traci.simulationStep()
-        time.sleep(0.01) # small delay for GUI updates
-        step += 1
-
-    traci.close()
-
 hasBeenRerouted = {}
 def rerouteEveryVehOnDepart(conn, simStep):
     departed = conn.simulation.getDepartedIDList()
@@ -67,7 +47,13 @@ def rerouteEveryVehOnDepart(conn, simStep):
 
 
 def main(args):
-    traci.start([os.environ["SUMO_BIN"], "-c", "/home/andrew/Documents/School/FA25/CS4420/traffic-sim/map.sumocfg","--start"])
+    traci.start([os.environ["SUMO_BIN"],
+             "-c", os.getcwd()+"/map.sumocfg",
+             "--start",
+             "--edgedata-output",get_unique_filename("data/edges.xml"),
+             "--fcd-output", get_unique_filename("data/fcd.xml"),
+             "--netstate-dump", get_unique_filename("data/dump.xml")
+            ])
     print("Connected to SUMO")
 
     closedEdges = ["-301325216#1", "301327121#12", "19317061#16", "19318601#13", "19317061#17"]
@@ -78,7 +64,7 @@ def main(args):
     if not args.no_wait:
         x = input("Waiting for user, press enter to continue...")
     step = 1
-    while step < 6000:
+    while step < 60000:
         traci.simulationStep()
         if(args.knowledge_sharing):
             rerouteEveryVehOnDepart(traci, step)
