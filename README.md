@@ -1,28 +1,49 @@
-run sumo from the command line with: sumo-gui -c map.sumocfg --remote-port 13333 --start
-this is using sumo 1.25.0
+# Dependencies
 
-then run the closeReroute.py/rerouteImmediately.py file
-(the first one will only reroute when close to the blockage, the second one will reroute the moment the vehicle spawns in)
+SUMO 1.25.0
 
 
-the simulation will not start until it connects
+# Installation / Setup
 
-once it connects, it will freeze the simulation for you to close the roads.
-the video i sent in the discord is the edges/roads you need to close from the sumo-gui
+First, install SUMO. The easiest way to use SUMO is with a python virtual environment:
 
-then go back to the python script command line and hit enter and the simulation will start running
+```
+$ git clone git@github.com:vjgtigers/traffic-sim.git
+$ cd traffic-sim
+$ python -m venv venv
+$ source venv/bin/activate
+# note: may be need to run $ ./venv/bin/activate.bat on windows
+$ pip3 install eclipse-sumo
+```
 
-this simulation simulates cars only turning around once they get close to the crash
-depending on how much time i have to work on this, i might have the cars slow down around the area too to make the impact more noticable 
+Next, prior to running you must set the `SUMO_BIN` enviorment variable to the location the SUMO executable file.
+On linux, using a virtual environment this looks like
 
-i dont have the cars rerouting from a farther distance yet -- now have one working, its the rerouteImmediately.py file
+```
+export SUMO_BIN=$(pwd)/venv/bin/sumo-gui
+# or, for no GUI...
+export SUMO_BIN=$(pwd)/venv/bin/sumo
+```
 
-the two other "simulations" would just be running the map.sumocfg, without connecting to the python file, just remove the --remote-port 13333
-this would simulate the general enviroment without any accidents/road closures
+Next you may run either of the scenarios using
 
-the other "simulation" would be to close those edges right when the simulation starts and let the traffic back up
-simulating no rerouting at all and letting traffic just continue to back up
+```
+$ python3 closeReroute.py
+# or 
+$ python3 rerouteImmediately.py
+```
 
+The python script will prompt you to close the roads. Close the roads in the SUMO-GUI, then
+continue in the script by pressing enter
+
+# Scenariso
+
+Two scenarios are defined:
+
+- `closeReroute.py` - This scenario defines driving where the route information is not known ahead of time. I.e., the AV routes through the crash and has to u-turn and reroute.
+- `rerouteImmediately.py` - This scenario reflects knowledge sharing that allows AVs to automatically reroute for the road-closure (crash, etc)
+- Base simulation - Simply run the map.sumocfg without either python script to simulate the network under normal conditions as a baseline.
+    - You may also simulate the road closure in SUMO by manually closing the roads and continueing w/o any rerouting script. This would simulate no intelligence.
 
 ----
 
