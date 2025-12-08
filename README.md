@@ -4,8 +4,8 @@ This project details a basic road-simulation around the BGSU campus area in Bowl
 
 ## Authors
 
-Vaughn Gugger
-Andrew Humphreys
+- Vaughn Gugger
+- Andrew Humphreys
 
 # Dependencies
 
@@ -85,7 +85,9 @@ cd sumo
 export SUMO_HOME=$(pwd)
 ```
 
-### Heatmap of road utilization
+### Heatmap of average edge speeds 
+
+- Useful for visulization congestion
 
 ```console
 $ sumo/tools/visualization/plot_net_speeds.py -c data/edges.xml -n sumoFiles/map.net.xml 
