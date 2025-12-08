@@ -4,7 +4,7 @@ from watchers import EdgeEntryWatcher
 rerouteTimes = {}
 def addToRerouteQueue(simStep, vehs):
     for i in vehs:
-        rerouteTimes[i] = simStep+200
+        rerouteTimes[i] = simStep+50
         print(f"[step {simStep}] {i} added to reroute queue")
 
 def delayedReroute(conn, simStep):
@@ -26,7 +26,12 @@ def vehicleRerouter(conn, veh):
         conn.vehicle.rerouteTraveltime(vid)
         print(f"rerouting {vid}")
 
-
+def disallowEdges(conn):
+    print("entering disallow edges function")
+    edges = ["301325216#0", "-301325216#0"]
+    for i in edges:
+        conn.edge.setMaxSpeed(i,1)
+    print("crash simulated")
 
 def main():
     traci.start([os.environ["SUMO_BIN"], "-c", "/home/andrew/Documents/School/FA25/CS4420/traffic-sim/map.sumocfg","--start"])
@@ -36,7 +41,8 @@ def main():
     edgeWatchers = [EdgeEntryWatcher(edge, seed_from_simulation=True) for edge in closedEdges]
 
     traci.simulationStep()
-    x = input("CLose edges, then press enter to continue...")
+    disallowEdges(traci)
+    x = input("Waiting for user, press enter to continue...")
     step = 1
     while step < 6000:
         traci.simulationStep()

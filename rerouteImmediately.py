@@ -37,6 +37,12 @@ def rerouteEveryVehOnDepart(conn, simStep):
 
             print(f"[step {simStep}] {vid} has entered sim, being rerouted")
 
+def disallowEdges(conn):
+    print("entering disallow edges function")
+    edges = ["301325216#0", "-301325216#0"]
+    for i in edges:
+        conn.edge.setMaxSpeed(i,1)
+    print("crash simulated")
 
 
 def main():
@@ -47,7 +53,8 @@ def main():
     edgeWatchers = [EdgeEntryWatcher(edge, seed_from_simulation=True) for edge in closedEdges]
 
     traci.simulationStep()
-    x = input("CLose edges, then press enter to continue...")
+    disallowEdges(traci)
+    x = input("Waiting for user, press enter to continue...")
     step = 1
     while step < 6000:
         traci.simulationStep()

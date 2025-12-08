@@ -33,15 +33,16 @@ $ python3 closeReroute.py
 $ python3 rerouteImmediately.py
 ```
 
-The python script will prompt you to close the roads. Close the roads in the SUMO-GUI, then
-continue in the script by pressing enter
+The python script will prompt you to press enter to continue. This allows you to perform any custom configuration in SUMO if desired. If not, simply press enter.
 
 # Scenariso
 
 Two scenarios are defined:
 
-- `closeReroute.py` - This scenario defines driving where the route information is not known ahead of time. I.e., the AV routes through the crash and has to u-turn and reroute.
-- `rerouteImmediately.py` - This scenario reflects knowledge sharing that allows AVs to automatically reroute for the road-closure (crash, etc)
+- Crash Scenarios:
+    - Both of the following scenarios simulate a "crash" by setting the maximum speed on a thoroughfare edge to very low. This will naturally cause traffic to back up, as routes were not planned ahead of time with this information.
+    - `closeReroute.py` - This scenario defines driving where the route information is not known ahead of time. I.e., the AV routes through the crash and has to u-turn and reroute.
+    - `rerouteImmediately.py` - This scenario reflects knowledge sharing that allows AVs to automatically reroute for the road-closure (crash, etc)
 - Base simulation - Simply run the map.sumocfg without either python script to simulate the network under normal conditions as a baseline.
     - You may also simulate the road closure in SUMO by manually closing the roads and continueing w/o any rerouting script. This would simulate no intelligence.
 
