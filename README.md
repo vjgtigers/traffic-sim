@@ -1,3 +1,12 @@
+# Simulation
+
+This project details a basic road-simulation around the BGSU campus area in Bowling Green, OH (USA). The project uses SUMO with python control logic (via TraCI). The project is for a simulations course CS4420.
+
+## Authors
+
+Vaughn Gugger
+Andrew Humphreys
+
 # Dependencies
 
 SUMO 1.25.0
