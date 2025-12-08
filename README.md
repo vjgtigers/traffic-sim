@@ -7,7 +7,7 @@ SUMO 1.25.0
 
 First, install SUMO. The easiest way to use SUMO is with a python virtual environment:
 
-```
+```console
 $ git clone git@github.com:vjgtigers/traffic-sim.git
 $ cd traffic-sim
 $ python -m venv venv
@@ -19,7 +19,7 @@ $ pip3 install eclipse-sumo
 Next, prior to running you must set the `SUMO_BIN` enviorment variable to the location the SUMO executable file.
 On linux, using a virtual environment this looks like
 
-```
+```console
 export SUMO_BIN=$(pwd)/venv/bin/sumo-gui
 # or, for no GUI...
 export SUMO_BIN=$(pwd)/venv/bin/sumo
@@ -29,7 +29,7 @@ Note: If you are using sumo-gui binary, you should run the simulation with the `
 
 Next you may run either of the scenarios using
 
-```
+```console
 $ python3 sim.py
 # or 
 $ python3 sim.py --knowledge-sharing
