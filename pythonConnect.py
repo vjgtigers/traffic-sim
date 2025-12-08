@@ -18,6 +18,20 @@ import traceback
 import traci
 
 
+import sumolib
+import networkx as nx
+
+net = sumolib.net.readNet("./sumoFiles/map.net.xml")
+G_base = nx.DiGraph()
+
+for edge in net.getEdges():
+    u = edge.getFromNode().getID()
+    v = edge.getToNode().getID()
+    base_cost = edge.getLength() / max(edge.getSpeed(), 0.1)
+    G_base.add_edge(u, v,
+                    base_cost=base_cost,
+                    edge_id=edge.getID())
+
 
 
 
@@ -130,6 +144,59 @@ def deleteDifficultVehicles(conn):
             conn.vehicle.remove(vid)
 
 
+hasBeenRerouted = {}
+
+def rerouteEveryVehOnDepart(conn, simStep):
+    departed = conn.simulation.getDepartedIDList()
+    for vid in departed:
+        isDeparted = hasBeenRerouted.get(vid)
+        if isDeparted is None:
+            hasBeenRerouted[vid] = "rerouted"
+            conn.vehicle.rerouteTraveltime(vid)
+            #findRerouteWithNoise(conn, vid)
+            print(f"[step {simStep}] {vid} has entered sim, being rerouted")
+
+def find_route_with_noise(start_edge, end_edge, noise_factor=1.2):
+    """
+    Computes a shortest path with noisy edge weights.
+    Returns a list of edge IDs suitable for traci.vehicle.setRoute().
+    """
+
+    # map edges → nodes
+    start_node = net.getEdge(start_edge).getFromNode().getID()
+    end_node   = net.getEdge(end_edge).getToNode().getID()
+
+    # copy graph so we don't corrupt shared weights
+    G = G_base.copy()
+
+    # apply noise ONCE per edge
+    for u, v, data in G.edges(data=True):
+        base = data["base_cost"]
+        data["weight"] = base * random.uniform(1.0, noise_factor)
+
+    # shortest path on noisy graph
+    node_path = nx.shortest_path(G,
+                                 source=start_node,
+                                 target=end_node,
+                                 weight="weight")
+
+    # convert node path → SUMO edge IDs
+    edge_path = []
+    for u, v in zip(node_path[:-1], node_path[1:]):
+        edge_path.append(G[u][v]["edge_id"])
+
+    return edge_path
+
+
+
+def findRerouteWithNoise(conn, vid):
+    start = conn.vehicle.getRoadID(vid)
+    end = conn.vehicle.getRoute(vid)[-1]
+    route = find_route_with_noise(start, end, noise_factor=1.2)
+    conn.vehicle.setRoute(vid, route)
+
+
+
 def main():
     print("Attempting traci.connect(port={}) ...".format(PORT))
     try:
@@ -158,7 +225,7 @@ def main():
 
     approachClose_ids = ["-301325216#1", "301327121#12", "19317061#16", "19318601#13", "19317061#17"]
     watchers = [EdgeEntryWatcher(edges, seed_from_simulation=True) for edges in approachClose_ids]
-
+    checkWatchers = False
     # Do a small, safe probe before stepping
     try:
         # Try a lightweight query that verifies the server is responsive.
@@ -182,20 +249,23 @@ def main():
     try:
         for step in range(6000):
             try:
-                if step == 1:
+                if step == 0:
 
                     x = input("please continue")
                     #disallowEdges(conn)
                 conn.simulationStep()
+                if checkWatchers:
+                    for w in watchers:
+                        entries = w.check(conn)
+                        for vid in entries:
+                            print(f"[step {step}] {vid} entered {w.edge_id}")
+                        ##vehicleRerouter(conn, entries)
+                        addToRerouteQueue(step, entries)
+                    #deleteDifficultVehicles(conn)
+                    delayedReroute(conn, step)
 
-                for w in watchers:
-                    entries = w.check(conn)
-                    for vid in entries:
-                        print(f"[step {step}] {vid} entered {w.edge_id}")
-                    ##vehicleRerouter(conn, entries)
-                    addToRerouteQueue(step, entries)
-                #deleteDifficultVehicles(conn)
-                delayedReroute(conn, step)
+                rerouteEveryVehOnDepart(conn, step)
+
 
             except Exception as e:
                 print("simulationStep() failed at step", step, "->", type(e), e)
