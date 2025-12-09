@@ -90,6 +90,9 @@ Top 10% average: 456.97 seconds
 
 ```
 
+Additionally, you may use the `avgSpeedCalculation.py` file to extract an CSV file of the average speed at each period in the simulation.
+ex usage: `python avgSpeedCalculation.py <file name>.xml -o "<output file name>.csv"`
+
 # Data Visualization
 
 SUMO provides many tool for this in the source code. If you installed SUMO the tradition way or compiled from source they will be packaged with it.
@@ -111,17 +114,3 @@ $ sumo/tools/visualization/plot_net_dump.py -n sumoFiles/map.net.xml -i data/edg
 
 ```
 
-
-
-----
-
-if you run sumo with the command sumo-gui -c map.sumocfg --remote-port 13333 --start --fcd-output <file name>.xml --device.fcd.period 1.0
-
-this will provide a file of data from the simulation, the avgSpeedCalculation.py can be used to extract a .csv file of the avg speed at each period
-ex usage: python avgSpeedCalculation.py <file name>.xml -o "<output file name>.csv"
-
-i havent experimented with collecting other data other than what that program gets.
-the avg speed with just the rerouting when getting close basically brings it back up to almost the regular speed without any accident, so thats why i want to 
-implement some sort of slowing down the cars when they get close to make it a bit more noticable
-
-but we should try to find some other data we can also get that will show more
