@@ -20,6 +20,7 @@ for tripinfo in root.findall('tripinfo'):
 
 average_trip_time = statistics.mean(durations)
 std_dev = statistics.stdev(durations)
+print(f'n: {len(durations)}')
 print(f'Avg. Trip Time: {average_trip_time:.2f} seconds')
 print(f'Std. Deviation: {std_dev:.2f}')
 

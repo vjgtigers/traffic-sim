@@ -110,7 +110,13 @@ export SUMO_HOME=$(pwd)
 
 ```console
 $ sumo/tools/visualization/plot_net_speeds.py -c data/edges.xml -n sumoFiles/map.net.xml 
-$ sumo/tools/visualization/plot_net_dump.py -n sumoFiles/map.net.xml -i data/edges.xml --measures entered,entered --default-width 1 --colormap "#0:#0000c0,.25:#404080,.5:#808080,.75:#804040,1:#c00000"
+$ sumo/tools/visualization/plot_net_dump.py -n sumoFiles/map.net.xml -i data/edges.xml --measures entered,entered --default-width 1 --colormap "#0:#808080,1:#c00000"
+
 
 ```
+
+
+
+----
+
 
