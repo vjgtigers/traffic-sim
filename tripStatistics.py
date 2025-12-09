@@ -46,6 +46,6 @@ top_10_percent = durations[upper_10_index:]
 #    print(f"Top 10% average: {statistics.mean(top_10_percent):.2f} seconds")
 
 df = pd.DataFrame(durations)
-quantiles = df.quantile([0.25,0.75])[0].tolist()
-print(f'First/Third Quantile: {quantiles[0]}, {quantiles[1]}')
+quantiles = df.quantile([0.25,0.5,0.75])[0].tolist()
+print(f'First, Second, Third Quantile: {quantiles[0]}, {quantiles[1]}, {quantiles[2]}')
 #df.([0.25,0.75])
