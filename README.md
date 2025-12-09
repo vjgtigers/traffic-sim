@@ -72,7 +72,23 @@ Two scenarios are defined:
     - Knowledge sharing (with `--knowledge-sharing` flag) - This scenario reflects knowledge sharing that allows AVs to automatically reroute for the road-closure (crash, etc)
 - Base simulation - Simply run the map.sumocfg without either python script to simulate the network under normal conditions as a baseline.
     - You may also simulate the road closure in SUMO by manually closing the roads and continueing w/o any rerouting script. This would simulate no intelligence.
+# Basic Statistics
 
+The simulation tool will output some useful data files, i.e., `edges.xml`, and `tripinfo.xml`. The `tripStatistics.py` script is useful in computing
+some basic summary statistics.
+
+```bash
+$ python tripStatistics.py data/tripinfo.xml 
+Avg. Trip Time: 261.49 seconds
+Std. Deviation: 252.59
+
+10th percentile (lower tail): 413.00 seconds
+90th percentile (upper tail): 270.10 seconds
+
+Bottom 10% average: 181.42 seconds
+Top 10% average: 456.97 seconds
+
+```
 
 # Data Visualization
 
@@ -91,6 +107,8 @@ export SUMO_HOME=$(pwd)
 
 ```console
 $ sumo/tools/visualization/plot_net_speeds.py -c data/edges.xml -n sumoFiles/map.net.xml 
+$ sumo/tools/visualization/plot_net_dump.py -n sumoFiles/map.net.xml -i data/edges.xml --measures entered,entered --default-width 1 --colormap "#0:#0000c0,.25:#404080,.5:#808080,.75:#804040,1:#c00000"
+
 ```
 
 

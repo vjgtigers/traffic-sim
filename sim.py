@@ -83,7 +83,8 @@ def main(args):
                  # log output data:
              "--edgedata-output",get_unique_filename("data/edges.xml"),
              "--fcd-output", get_unique_filename("data/fcd.xml"),
-             "--netstate-dump", get_unique_filename("data/dump.xml")
+             "--netstate-dump", get_unique_filename("data/dump.xml"),
+             "--tripinfo-output", get_unique_filename("data/tripinfo.xml")
             ])
     print("Connected to SUMO")
 
@@ -102,10 +103,12 @@ def main(args):
 
     # Move through the simulation:
     step = 1
-    while step < 60000:
+    while traci.simulation.getMinExpectedNumber() > 0:
         traci.simulationStep()
 
-        if(args.knowledge_sharing):
+        if(args.no_intelligence):
+            pass
+        elif(args.knowledge_sharing):
             # if the knowledge sharing scenario is enabled
             # immediately reroute every vehicle as soon as it
             # johns the simulation
@@ -136,6 +139,7 @@ Our command line arguments are defined here:
 
 parser = argparse.ArgumentParser(description="Simulate BGSU campus with a crash on wooster")
 parser.add_argument("--knowledge-sharing", "-k", action="store_true", help="Enable knowledge sharing scenario")
+parser.add_argument("--no-intelligence", "-d", action="store_true", help="Disable crash-rerouting")
 parser.add_argument("--gui", "-g", action="store_true", help="enable for GUI updates if using sumo-gui")
 parser.add_argument("--no-wait", "-n", action="store_true", help="Automatically start without waiting on user")
 args = parser.parse_args()
