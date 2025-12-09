@@ -77,7 +77,7 @@ Two scenarios are defined:
 The simulation tool will output some useful data files, i.e., `edges.xml`, and `tripinfo.xml`. The `tripStatistics.py` script is useful in computing
 some basic summary statistics.
 
-```bash
+```console
 $ python tripStatistics.py data/tripinfo.xml 
 Avg. Trip Time: 261.49 seconds
 Std. Deviation: 252.59

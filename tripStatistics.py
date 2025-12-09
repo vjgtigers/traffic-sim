@@ -24,6 +24,7 @@ print(f'Std. Deviation: {std_dev:.2f}')
 
 
 # Calcualte what time represents the top/bottom 10% of trip times
+durations.sort()
 n = len(durations)
 lower_10_index = int(n * 0.10)
 upper_10_index = int(n * 0.90)
