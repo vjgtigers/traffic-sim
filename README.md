@@ -9,8 +9,8 @@ This project details a basic road-simulation around the BGSU campus area in Bowl
 
 # Dependencies
 
-SUMO 1.25.0
-
+- SUMO 1.25.0
+- pandas
 
 # Installation / Setup
 

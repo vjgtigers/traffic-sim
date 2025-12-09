@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import argparse
 import statistics
+import pandas as pd
 
 parser = argparse.ArgumentParser(
         prog='tripinfo statistic calculator',
@@ -36,10 +37,15 @@ upper_10_percentile = durations[upper_10_index]
 bottom_10_percent = durations[:lower_10_index]
 top_10_percent = durations[upper_10_index:]
 
-print(f"\n10th percentile (lower tail): {lower_10_percentile:.2f} seconds")
-print(f"90th percentile (upper tail): {upper_10_percentile:.2f} seconds")
+#print(f"\n10th percentile (lower tail): {lower_10_percentile:.2f} seconds")
+#print(f"90th percentile (upper tail): {upper_10_percentile:.2f} seconds")
 
-if bottom_10_percent:
-    print(f"\nBottom 10% average: {statistics.mean(bottom_10_percent):.2f} seconds")
-if top_10_percent:
-    print(f"Top 10% average: {statistics.mean(top_10_percent):.2f} seconds")
+#if bottom_10_percent:
+#    print(f"\nBottom 10% average: {statistics.mean(bottom_10_percent):.2f} seconds")
+#if top_10_percent:
+#    print(f"Top 10% average: {statistics.mean(top_10_percent):.2f} seconds")
+
+df = pd.DataFrame(durations)
+quantiles = df.quantile([0.25,0.75])[0].tolist()
+print(f'First/Third Quantile: {quantiles[0]}, {quantiles[1]}')
+#df.([0.25,0.75])
