@@ -65,6 +65,22 @@ def rerouteEveryVehOnDepart(conn, simStep):
 
             print(f"[step {simStep}] {vid} has entered sim, being rerouted")
 
+def rerouteSomeVehOnDepart(conn, simStep):
+    """
+    This function is called every simulation step, and if a vehicle
+    is departing on this step it will immediately perform the
+    rerouting algorithm to avoid the crash.
+    """
+    departed = conn.simulation.getDepartedIDList()
+    for vid in departed:
+        if(int(vid) % 3 == 0):
+            isDeparted = hasBeenRerouted.get(vid)
+            if isDeparted is None:
+                hasBeenRerouted[vid] = "rerouted"
+                conn.vehicle.rerouteTraveltime(vid)
+
+                print(f"[step {simStep}] {vid} has entered sim, being rerouted")
+
 
 def main(args):
     """
@@ -80,7 +96,7 @@ def main(args):
     traci.start([os.environ["SUMO_BIN"],
              "-c", os.getcwd()+"/map.sumocfg",
              "--start", # auto-start w/o user
-                 # log output data:
+                 # log output datae
              "--edgedata-output",get_unique_filename("data/edges.xml"),
              "--fcd-output", get_unique_filename("data/fcd.xml"),
              "--netstate-dump", get_unique_filename("data/dump.xml"),
@@ -114,6 +130,8 @@ def main(args):
             # johns the simulation
             rerouteEveryVehOnDepart(traci, step)
         else:
+            if(args.mixed_intelligence):
+                rerouteSomeVehOnDepart(traci,step)
             # For the normal simulation scenario, each of the edge
             # watchers will look for vehicles approaching the crash.
             for watcher in edgeWatchers:
@@ -139,6 +157,7 @@ Our command line arguments are defined here:
 
 parser = argparse.ArgumentParser(description="Simulate BGSU campus with a crash on wooster")
 parser.add_argument("--knowledge-sharing", "-k", action="store_true", help="Enable knowledge sharing scenario")
+parser.add_argument("--mixed-intelligence", "-m", action="store_true")
 parser.add_argument("--no-intelligence", "-d", action="store_true", help="Disable crash-rerouting")
 parser.add_argument("--gui", "-g", action="store_true", help="enable for GUI updates if using sumo-gui")
 parser.add_argument("--no-wait", "-n", action="store_true", help="Automatically start without waiting on user")
