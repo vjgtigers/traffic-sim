@@ -34,6 +34,6 @@ meanNormal = statistics.mean(durationsNormal)
 
 t_stat, p_value = ttest_ind(durationsAV,durationsNormal, equal_var=False)
 
-print(f"Normal Mean: {meanNormal}, AV Mean: {meanAV}")
-print(f"t-statistic: {t_stat}")
-print(f"p-value: {p_value}")
+print(f"Normal Mean: {meanNormal:.2f}, AV Mean: {meanAV:.2f}")
+print(f"t-statistic: {t_stat:.2f}")
+print(f"p-value: {p_value:.2e}")
